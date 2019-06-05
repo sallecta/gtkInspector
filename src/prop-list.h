@@ -20,41 +20,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_PROPLIST_H_
-#define _GTKPARASITE_PROPLIST_H_
+#ifndef _gtkinspector_PROPLIST_H_
+#define _gtkinspector_PROPLIST_H_
 
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_PROPLIST            (parasite_proplist_get_type())
-#define PARASITE_PROPLIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_PROPLIST, ParasitePropList))
-#define PARASITE_PROPLIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_PROPLIST, ParasitePropListClass))
-#define PARASITE_IS_PROPLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_PROPLIST))
-#define PARASITE_IS_PROPLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_PROPLIST))
-#define PARASITE_PROPLIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_PROPLIST, ParasitePropListClass))
+#define GTKINSPECTOR_TYPE_PROPLIST            (gtkinspector_proplist_get_type())
+#define GTKINSPECTOR_PROPLIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTKINSPECTOR_TYPE_PROPLIST, GtkinspectorPropList))
+#define GTKINSPECTOR_PROPLIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTKINSPECTOR_TYPE_PROPLIST, GtkinspectorPropListClass))
+#define GTKINSPECTOR_IS_PROPLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTKINSPECTOR_TYPE_PROPLIST))
+#define GTKINSPECTOR_IS_PROPLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTKINSPECTOR_TYPE_PROPLIST))
+#define GTKINSPECTOR_PROPLIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTKINSPECTOR_TYPE_PROPLIST, GtkinspectorPropListClass))
 
 
-typedef struct _ParasitePropListPrivate ParasitePropListPrivate;
+typedef struct _GtkinspectorPropListPrivate GtkinspectorPropListPrivate;
 
-typedef struct _ParasitePropList {
+typedef struct _GtkinspectorPropList {
    GtkTreeView parent;
-   ParasitePropListPrivate *priv;
-} ParasitePropList;
+   GtkinspectorPropListPrivate *priv;
+} GtkinspectorPropList;
 
-typedef struct _ParasitePropListClass {
+typedef struct _GtkinspectorPropListClass {
    GtkTreeViewClass parent;
-} ParasitePropListClass;
+} GtkinspectorPropListClass;
 
 
 G_BEGIN_DECLS
 
-GType      parasite_proplist_get_type   (void);
-GtkWidget *parasite_proplist_new        (GtkWidget *widget_tree);
-void       parasite_proplist_set_object (ParasitePropList *proplist,
+GType      gtkinspector_proplist_get_type   (void);
+GtkWidget *gtkinspector_proplist_new        (GtkWidget *widget_tree);
+void       gtkinspector_proplist_set_object (GtkinspectorPropList *proplist,
                                          GObject          *object);
 
 G_END_DECLS
 
-#endif // _GTKPARASITE_PROPLIST_H_
+#endif // _gtkinspector_PROPLIST_H_
 
 // vim: set et sw=4 ts=4:

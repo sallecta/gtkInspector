@@ -86,7 +86,7 @@ wrap_gobj(PyObject *self, PyObject *args)
     return pygobject_new(obj);
 }
 
-static PyMethodDef parasite_python_methods[] = {
+static PyMethodDef gtkinspector_python_methods[] = {
     {"capture_stdout", capture_stdout, METH_VARARGS, "Captures stdout"},
     {"capture_stderr", capture_stderr, METH_VARARGS, "Captures stderr"},
     {"gobj", wrap_gobj, METH_VARARGS, "Wraps a C GObject"},
@@ -104,7 +104,7 @@ is_blacklisted(void)
 #endif // ENABLE_PYTHON
 
 void
-parasite_python_init(void)
+gtkinspector_python_init(void)
 {
 #ifdef ENABLE_PYTHON
     int res;
@@ -131,18 +131,18 @@ parasite_python_init(void)
 
     res = sigaction(SIGINT, &old_sigint, NULL);
 
-    Py_InitModule("parasite", parasite_python_methods);
+    Py_InitModule("gtkinspector", gtkinspector_python_methods);
     PyRun_SimpleString(
-        "import parasite\n"
+        "import gtkinspector\n"
         "import sys\n"
         "\n"
         "class StdoutCatcher:\n"
         "    def write(self, str):\n"
-        "        parasite.capture_stdout(str)\n"
+        "        gtkinspector.capture_stdout(str)\n"
         "\n"
         "class StderrCatcher:\n"
         "    def write(self, str):\n"
-        "        parasite.capture_stderr(str)\n"
+        "        gtkinspector.capture_stderr(str)\n"
         "\n"
     );
 
@@ -177,9 +177,9 @@ parasite_python_init(void)
 }
 
 void
-parasite_python_run(const char *command,
-                    ParasitePythonLogger stdout_logger,
-                    ParasitePythonLogger stderr_logger,
+gtkinspector_python_run(const char *command,
+                    GtkinspectorPythonLogger stdout_logger,
+                    GtkinspectorPythonLogger stderr_logger,
                     gpointer user_data)
 {
 #ifdef ENABLE_PYTHON
@@ -230,7 +230,7 @@ parasite_python_run(const char *command,
 }
 
 gboolean
-parasite_python_is_enabled(void)
+gtkinspector_python_is_enabled(void)
 {
     return python_enabled;
 }

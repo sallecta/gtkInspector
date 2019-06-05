@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "parasite.h"
+#include "gtkinspector.h"
 #include "prop-list.h"
 #include "property-cell-renderer.h"
 
@@ -42,7 +42,7 @@ enum
   PROP_WIDGET_TREE
 };
 
-struct _ParasitePropListPrivate
+struct _GtkinspectorPropListPrivate
 {
   GObject *object;
   GtkListStore *model;
@@ -52,12 +52,12 @@ struct _ParasitePropListPrivate
   GtkTreeViewColumn *property_column;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasitePropList, parasite_proplist, GTK_TYPE_TREE_VIEW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkinspectorPropList, gtkinspector_proplist, GTK_TYPE_TREE_VIEW)
 
 static void
-parasite_proplist_init (ParasitePropList *pl)
+gtkinspector_proplist_init (GtkinspectorPropList *pl)
 {
-  pl->priv = parasite_proplist_get_instance_private (pl);
+  pl->priv = gtkinspector_proplist_get_instance_private (pl);
 }
 
 static gboolean
@@ -66,7 +66,7 @@ query_tooltip_cb (GtkWidget        *widget,
 			      gint             y,
 			      gboolean         keyboard_tip,
 			      GtkTooltip       *tooltip,
-			      ParasitePropList *pl)
+			      GtkinspectorPropList *pl)
 {
   GtkTreeIter iter;
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
@@ -103,7 +103,7 @@ draw_columns (GtkTreeViewColumn *column,
               GtkCellRenderer   *renderer,
               GtkTreeModel      *model,
               GtkTreeIter       *iter,
-              ParasitePropList  *pl)
+              GtkinspectorPropList  *pl)
 {
   gboolean ro;
 
@@ -121,7 +121,7 @@ draw_columns (GtkTreeViewColumn *column,
 static void
 constructed (GObject *object)
 {
-  ParasitePropList *pl = PARASITE_PROPLIST (object);
+  GtkinspectorPropList *pl = GTKINSPECTOR_PROPLIST (object);
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
 
@@ -158,8 +158,8 @@ constructed (GObject *object)
                                           pl,
                                           NULL);
 
-  renderer = parasite_property_cell_renderer_new ();
-  g_object_set_data (G_OBJECT (renderer), "parasite-widget-tree", pl->priv->widget_tree);
+  renderer = gtkinspector_property_cell_renderer_new ();
+  g_object_set_data (G_OBJECT (renderer), "gtkinspector-widget-tree", pl->priv->widget_tree);
   g_object_set (renderer,
                 "scale", TREE_TEXT_SCALE,
                 "editable", TRUE,
@@ -204,7 +204,7 @@ get_property (GObject    *object,
               GValue     *value,
               GParamSpec *pspec)
 {
-  ParasitePropList *pl = PARASITE_PROPLIST (object);
+  GtkinspectorPropList *pl = GTKINSPECTOR_PROPLIST (object);
 
   switch (param_id)
     {
@@ -224,7 +224,7 @@ set_property (GObject      *object,
               const GValue *value,
               GParamSpec   *pspec)
 {
-  ParasitePropList *pl = PARASITE_PROPLIST (object);
+  GtkinspectorPropList *pl = GTKINSPECTOR_PROPLIST (object);
 
   switch (param_id)
     {
@@ -239,7 +239,7 @@ set_property (GObject      *object,
 }
 
 static void
-parasite_proplist_class_init (ParasitePropListClass *klass)
+gtkinspector_proplist_class_init (GtkinspectorPropListClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
@@ -257,7 +257,7 @@ parasite_proplist_class_init (ParasitePropListClass *klass)
 }
 
 static void
-parasite_prop_list_update_prop (ParasitePropList *pl,
+gtkinspector_prop_list_update_prop (GtkinspectorPropList *pl,
                                 GtkTreeIter *iter,
                                 GParamSpec *prop)
 {
@@ -293,26 +293,26 @@ parasite_prop_list_update_prop (ParasitePropList *pl,
 }
 
 static void
-parasite_proplist_prop_changed_cb (GObject *pspec,
+gtkinspector_proplist_prop_changed_cb (GObject *pspec,
                                    GParamSpec *prop,
-                                   ParasitePropList *pl)
+                                   GtkinspectorPropList *pl)
 {
   GtkTreeIter *iter = g_hash_table_lookup(pl->priv->prop_iters, prop->name);
 
   if (iter != NULL)
-    parasite_prop_list_update_prop (pl, iter, prop);
+    gtkinspector_prop_list_update_prop (pl, iter, prop);
 }
 
 GtkWidget *
-parasite_proplist_new (GtkWidget *widget_tree)
+gtkinspector_proplist_new (GtkWidget *widget_tree)
 {
-    return g_object_new (PARASITE_TYPE_PROPLIST,
+    return g_object_new (GTKINSPECTOR_TYPE_PROPLIST,
                          "widget-tree", widget_tree,
                          NULL);
 }
 
 void
-parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
+gtkinspector_proplist_set_object (GtkinspectorPropList* pl, GObject *object)
 {
   GtkTreeIter iter;
   GParamSpec **props;
@@ -346,7 +346,7 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
         continue;
 
       gtk_list_store_append (pl->priv->model, &iter);
-      parasite_prop_list_update_prop (pl, &iter, prop);
+      gtkinspector_prop_list_update_prop (pl, &iter, prop);
 
       g_hash_table_insert (pl->priv->prop_iters, (gpointer) prop->name, gtk_tree_iter_copy (&iter));
 
@@ -356,7 +356,7 @@ parasite_proplist_set_object (ParasitePropList* pl, GObject *object)
       pl->priv->signal_cnxs =
             g_list_prepend (pl->priv->signal_cnxs, GINT_TO_POINTER(
                 g_signal_connect(object, signal_name,
-                                 G_CALLBACK (parasite_proplist_prop_changed_cb),
+                                 G_CALLBACK (gtkinspector_proplist_prop_changed_cb),
                                  pl)));
 
         g_free (signal_name);

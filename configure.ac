@@ -1,5 +1,5 @@
 AC_PREREQ([2.64])
-AC_INIT([gtkparasite],[0.3.0],[chipx86@chipx86.com])
+AC_INIT([gtkinspector],[0.3.0],[nil@nil.nil])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([src/window.c])
 AC_CONFIG_HEADERS([config.h])

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 #include <stdlib.h>
-#include "parasite.h"
+#include "gtkinspector.h"
 #include "prop-list.h"
 #include "classes-list.h"
 #include "css-editor.h"
@@ -35,44 +35,44 @@
 #include "config.h"
 
 static void
-on_widget_tree_selection_changed (ParasiteWidgetTree *widget_tree,
-                                  ParasiteWindow     *parasite)
+on_widget_tree_selection_changed (GtkinspectorWidgetTree *widget_tree,
+                                  GtkinspectorWindow     *gtkinspector)
 {
-  GObject *selected = parasite_widget_tree_get_selected_object (widget_tree);
+  GObject *selected = gtkinspector_widget_tree_get_selected_object (widget_tree);
 
   if (selected != NULL)
     {
-      parasite_proplist_set_object (PARASITE_PROPLIST (parasite->prop_list),
+      gtkinspector_proplist_set_object (GTKINSPECTOR_PROPLIST (gtkinspector->prop_list),
                                     selected);
-      parasite_objecthierarchy_set_object (PARASITE_OBJECTHIERARCHY (parasite->oh),
+      gtkinspector_objecthierarchy_set_object (GTKINSPECTOR_OBJECTHIERARCHY (gtkinspector->oh),
                                            selected);
 
       if (GTK_IS_WIDGET (selected))
         {
           GtkWidget *widget = GTK_WIDGET (selected);
 
-          gtkparasite_flash_widget(parasite, widget);
-          parasite_buttonpath_set_widget (PARASITE_BUTTONPATH (parasite->button_path), widget);
-          parasite_classeslist_set_widget (PARASITE_CLASSESLIST (parasite->classes_list), widget);
-          parasite_csseditor_set_widget (PARASITE_CSSEDITOR (parasite->widget_css_editor), widget);
+          gtkinspector_flash_widget(gtkinspector, widget);
+          gtkinspector_buttonpath_set_widget (GTKINSPECTOR_BUTTONPATH (gtkinspector->button_path), widget);
+          gtkinspector_classeslist_set_widget (GTKINSPECTOR_CLASSESLIST (gtkinspector->classes_list), widget);
+          gtkinspector_csseditor_set_widget (GTKINSPECTOR_CSSEDITOR (gtkinspector->widget_css_editor), widget);
         }
       else
         {
-          gtk_widget_set_sensitive (parasite->classes_list, FALSE);
-          gtk_widget_set_sensitive (parasite->widget_css_editor, FALSE);
+          gtk_widget_set_sensitive (gtkinspector->classes_list, FALSE);
+          gtk_widget_set_sensitive (gtkinspector->widget_css_editor, FALSE);
         }
     }
 }
 
 
 static gboolean
-on_widget_tree_button_press(ParasiteWidgetTree *widget_tree,
+on_widget_tree_button_press(GtkinspectorWidgetTree *widget_tree,
                             GdkEventButton *event,
-                            ParasiteWindow *parasite)
+                            GtkinspectorWindow *gtkinspector)
 {
     if (event->button == 3)
     {
-        gtk_menu_popup(GTK_MENU(parasite->widget_popup), NULL, NULL,
+        gtk_menu_popup(GTK_MENU(gtkinspector->widget_popup), NULL, NULL,
                        NULL, NULL, event->button, event->time);
     }
 
@@ -82,28 +82,28 @@ on_widget_tree_button_press(ParasiteWidgetTree *widget_tree,
 
 static void
 on_send_widget_to_shell_activate(GtkWidget *menuitem,
-                                 ParasiteWindow *parasite)
+                                 GtkinspectorWindow *gtkinspector)
 {
   char *str;
   GObject *object;
 
-  object = parasite_widget_tree_get_selected_object (PARASITE_WIDGET_TREE (parasite->widget_tree));
+  object = gtkinspector_widget_tree_get_selected_object (GTKINSPECTOR_WIDGET_TREE (gtkinspector->widget_tree));
 
   if (!object)
     return;
 
-  str = g_strdup_printf ("parasite.gobj(%p)", object);
-  parasite_python_shell_append_text (PARASITE_PYTHON_SHELL (parasite->python_shell),
+  str = g_strdup_printf ("gtkinspector.gobj(%p)", object);
+  gtkinspector_python_shell_append_text (GTKINSPECTOR_PYTHON_SHELL (gtkinspector->python_shell),
                                      str,
                                      NULL);
 
   g_free(str);
-  parasite_python_shell_focus (PARASITE_PYTHON_SHELL (parasite->python_shell));
+  gtkinspector_python_shell_focus (GTKINSPECTOR_PYTHON_SHELL (gtkinspector->python_shell));
 }
 
 
 static GtkWidget *
-create_widget_list_pane(ParasiteWindow *parasite)
+create_widget_list_pane(GtkinspectorWindow *gtkinspector)
 {
     GtkWidget *swin;
 
@@ -115,27 +115,27 @@ create_widget_list_pane(ParasiteWindow *parasite)
                         "expand", TRUE,
                         NULL);
 
-    parasite->widget_tree = parasite_widget_tree_new();
-    gtk_container_add(GTK_CONTAINER(swin), parasite->widget_tree);
+    gtkinspector->widget_tree = gtkinspector_widget_tree_new();
+    gtk_container_add(GTK_CONTAINER(swin), gtkinspector->widget_tree);
 
-    g_signal_connect(G_OBJECT(parasite->widget_tree),
+    g_signal_connect(G_OBJECT(gtkinspector->widget_tree),
                      "widget-changed",
                      G_CALLBACK(on_widget_tree_selection_changed),
-                     parasite);
+                     gtkinspector);
 
-    if (parasite_python_is_enabled())
+    if (gtkinspector_python_is_enabled())
     {
-        g_signal_connect(G_OBJECT(parasite->widget_tree),
+        g_signal_connect(G_OBJECT(gtkinspector->widget_tree),
                          "button-press-event",
                          G_CALLBACK(on_widget_tree_button_press),
-                         parasite);
+                         gtkinspector);
     }
 
     return swin;
 }
 
 static GtkWidget *
-create_prop_list_pane(ParasiteWindow *parasite)
+create_prop_list_pane(GtkinspectorWindow *gtkinspector)
 {
     GtkWidget *swin;
 
@@ -146,22 +146,22 @@ create_prop_list_pane(ParasiteWindow *parasite)
                         "width-request", 250,
                         NULL);
 
-    parasite->prop_list = parasite_proplist_new (parasite->widget_tree);
-    gtk_container_add(GTK_CONTAINER(swin), parasite->prop_list);
+    gtkinspector->prop_list = gtkinspector_proplist_new (gtkinspector->widget_tree);
+    gtk_container_add(GTK_CONTAINER(swin), gtkinspector->prop_list);
 
     return swin;
 }
 
 static void
 on_show_graphic_updates_toggled(GtkWidget *toggle_button,
-                                ParasiteWindow *parasite)
+                                GtkinspectorWindow *gtkinspector)
 {
     gdk_window_set_debug_updates(
         gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle_button)));
 }
 
 static GtkWidget *
-create_toolbar (ParasiteWindow *window) {
+create_toolbar (GtkinspectorWindow *window) {
   GtkWidget *button;
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   GtkStyleContext *context = gtk_widget_get_style_context (box);
@@ -169,7 +169,7 @@ create_toolbar (ParasiteWindow *window) {
 
   gtk_style_context_add_class (context, "linked");
 
-  button = gtkparasite_inspect_button_new (window);
+  button = gtkinspector_inspect_button_new (window);
   gtk_container_add (GTK_CONTAINER (box), button);
 
   button = gtk_toggle_button_new ();
@@ -199,16 +199,16 @@ delete_window (GtkWidget *widget) {
 }
 
 void
-gtkparasite_window_create()
+gtkinspector_window_create()
 {
-    ParasiteWindow *window;
+    GtkinspectorWindow *window;
     GtkWidget *vpaned, *hpaned;
     GtkWidget *header;
     GtkWidget *box;
     GtkWidget *nb;
     char *title;
 
-    window = g_new0(ParasiteWindow, 1);
+    window = g_new0(GtkinspectorWindow, 1);
 
     /*
      * Create the top-level window.
@@ -222,7 +222,7 @@ gtkparasite_window_create()
                       G_CALLBACK (delete_window),
                       NULL);
 
-    title = g_strdup_printf("Parasite - %s", g_get_application_name());
+    title = g_strdup_printf("Gtkinspector - %s", g_get_application_name());
     gtk_window_set_title (GTK_WINDOW (window->window), title);
 
     header = gtk_header_bar_new ();
@@ -247,14 +247,14 @@ gtkparasite_window_create()
                               gtk_label_new ("Widget Tree"));
 
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
-                              parasite_themes_new (),
+                              gtkinspector_themes_new (),
                               gtk_label_new ("Themes"));
 
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
-                              parasite_csseditor_new (TRUE),
+                              gtkinspector_csseditor_new (TRUE),
                               gtk_label_new ("Custom CSS"));
 
-    window->button_path = parasite_buttonpath_new ();
+    window->button_path = gtkinspector_buttonpath_new ();
     gtk_container_add (GTK_CONTAINER (box), window->button_path);
 
     hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
@@ -272,28 +272,28 @@ gtkparasite_window_create()
                               create_prop_list_pane (window),
                               gtk_label_new ("GObject Properties"));
 
-    window->oh = parasite_objecthierarchy_new ();
+    window->oh = gtkinspector_objecthierarchy_new ();
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
                               window->oh,
                               gtk_label_new ("Hierarchy"));
 
-    window->classes_list = parasite_classeslist_new ();
+    window->classes_list = gtkinspector_classeslist_new ();
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
                               window->classes_list,
                               gtk_label_new ("CSS Classes"));
 
-    window->widget_css_editor = parasite_csseditor_new (FALSE);
+    window->widget_css_editor = gtkinspector_csseditor_new (FALSE);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb),
                               window->widget_css_editor,
                               gtk_label_new ("Custom CSS"));
 
     gtk_paned_pack2 (GTK_PANED (hpaned), nb, FALSE, FALSE);
 
-    if (parasite_python_is_enabled())
+    if (gtkinspector_python_is_enabled())
     {
         GtkWidget *menuitem;
 
-        window->python_shell = parasite_python_shell_new();
+        window->python_shell = gtkinspector_python_shell_new();
         gtk_paned_pack2(GTK_PANED(vpaned), window->python_shell, FALSE, FALSE);
 
         /*

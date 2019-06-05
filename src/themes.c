@@ -22,21 +22,21 @@
 
 #include "themes.h"
 
-struct _ParasiteThemesPrivate
+struct _GtkinspectorThemesPrivate
 {
   int dummy;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteThemes, parasite_themes, GTK_TYPE_LIST_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkinspectorThemes, gtkinspector_themes, GTK_TYPE_LIST_BOX)
 
 static void
-parasite_themes_init (ParasiteThemes *pt)
+gtkinspector_themes_init (GtkinspectorThemes *pt)
 {
-  pt->priv = parasite_themes_get_instance_private (pt);
+  pt->priv = gtkinspector_themes_get_instance_private (pt);
 }
 
 static GtkWidget *
-create_dark (ParasiteThemes *pt)
+create_dark (GtkinspectorThemes *pt)
 {
   GtkWidget *b, *l, *s;
 
@@ -83,7 +83,7 @@ fill_gtk (const char *path, GHashTable *t)
 }
 
 static void
-gtk_changed (GtkComboBox *c, ParasiteThemes *pt)
+gtk_changed (GtkComboBox *c, GtkinspectorThemes *pt)
 {
   char *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
 
@@ -94,7 +94,7 @@ gtk_changed (GtkComboBox *c, ParasiteThemes *pt)
 }
 
 static GtkWidget *
-create_gtk (ParasiteThemes *pt)
+create_gtk (GtkinspectorThemes *pt)
 {
   GtkWidget *b, *l, *c;
   GHashTable *t;
@@ -149,7 +149,7 @@ create_gtk (ParasiteThemes *pt)
 static void
 constructed (GObject *object)
 {
-  ParasiteThemes *pt = PARASITE_THEMES (object);
+  GtkinspectorThemes *pt = GTKINSPECTOR_THEMES (object);
   GtkContainer *box = GTK_CONTAINER (object);
 
   g_object_set (object,
@@ -161,7 +161,7 @@ constructed (GObject *object)
 }
 
 static void
-parasite_themes_class_init (ParasiteThemesClass *klass)
+gtkinspector_themes_class_init (GtkinspectorThemesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -169,9 +169,9 @@ parasite_themes_class_init (ParasiteThemesClass *klass)
 }
 
 GtkWidget *
-parasite_themes_new (void)
+gtkinspector_themes_new (void)
 {
-  return GTK_WIDGET (g_object_new (PARASITE_TYPE_THEMES, NULL));
+  return GTK_WIDGET (g_object_new (GTKINSPECTOR_TYPE_THEMES, NULL));
 }
 
 // vim: set et sw=4 ts=4:

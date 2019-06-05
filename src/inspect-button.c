@@ -21,48 +21,48 @@
  * THE SOFTWARE.
  */
 
-#include "parasite.h"
+#include "gtkinspector.h"
 #include "widget-tree.h"
 
 static void
 on_inspect_widget(GtkWidget *grab_window,
                   GdkEventButton *event,
-                  ParasiteWindow *parasite)
+                  GtkinspectorWindow *gtkinspector)
 {
   gdk_device_ungrab (gtk_get_current_event_device (), event->time);
-  gtk_widget_hide(parasite->highlight_window);
+  gtk_widget_hide(gtkinspector->highlight_window);
 
-  if (parasite->selected_window != NULL)
+  if (gtkinspector->selected_window != NULL)
     {
       GtkWidget *toplevel = NULL;
       GtkWidget *widget = NULL;
 
       gdk_window_get_user_data(
-            gdk_window_get_toplevel(parasite->selected_window),
+            gdk_window_get_toplevel(gtkinspector->selected_window),
             (gpointer*)&toplevel);
 
-      gdk_window_get_user_data (parasite->selected_window, (gpointer*)&widget);
+      gdk_window_get_user_data (gtkinspector->selected_window, (gpointer*)&widget);
 
       if (toplevel)
         {
-          parasite_widget_tree_scan (PARASITE_WIDGET_TREE (parasite->widget_tree),
+          gtkinspector_widget_tree_scan (GTKINSPECTOR_WIDGET_TREE (gtkinspector->widget_tree),
                                      toplevel);
         }
 
       if (widget)
         {
-          parasite_widget_tree_select_object (PARASITE_WIDGET_TREE (parasite->widget_tree),
+          gtkinspector_widget_tree_select_object (GTKINSPECTOR_WIDGET_TREE (gtkinspector->widget_tree),
                                               G_OBJECT (widget));
         }
     }
 }
 
 static void
-on_highlight_window_show (GtkWidget *window, ParasiteWindow *parasite)
+on_highlight_window_show (GtkWidget *window, GtkinspectorWindow *gtkinspector)
 {
-  if (gtk_widget_is_composited (parasite->window))
+  if (gtk_widget_is_composited (gtkinspector->window))
     {
-      gtk_widget_set_opacity (parasite->highlight_window, 0.2);
+      gtk_widget_set_opacity (gtkinspector->highlight_window, 0.2);
     }
   else
     {
@@ -74,11 +74,11 @@ on_highlight_window_show (GtkWidget *window, ParasiteWindow *parasite)
 }
 
 static void
-ensure_highlight_window (ParasiteWindow *parasite)
+ensure_highlight_window (GtkinspectorWindow *gtkinspector)
 {
   GdkRGBA color;
 
-  if (parasite->highlight_window != NULL)
+  if (gtkinspector->highlight_window != NULL)
     return;
 
   color.red = 0;
@@ -86,25 +86,25 @@ ensure_highlight_window (ParasiteWindow *parasite)
   color.blue = 65535;
   color.alpha = 1;
 
-  parasite->highlight_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_widget_override_background_color (parasite->highlight_window,
+  gtkinspector->highlight_window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_widget_override_background_color (gtkinspector->highlight_window,
                                         GTK_STATE_NORMAL,
                                         &color);
 
-  g_signal_connect (parasite->highlight_window, "show", G_CALLBACK (on_highlight_window_show), parasite);
+  g_signal_connect (gtkinspector->highlight_window, "show", G_CALLBACK (on_highlight_window_show), gtkinspector);
 }
 
 static void
 on_highlight_widget(GtkWidget *grab_window,
                     GdkEventMotion *event,
-                    ParasiteWindow *parasite)
+                    GtkinspectorWindow *gtkinspector)
 {
   GdkWindow *selected_window;
   gint x, y, width, height;
 
-  ensure_highlight_window (parasite);
+  ensure_highlight_window (gtkinspector);
 
-  gtk_widget_hide (parasite->highlight_window);
+  gtk_widget_hide (gtkinspector->highlight_window);
 
   selected_window = gdk_device_get_window_at_position (gtk_get_current_event_device (),
                                                        NULL,
@@ -112,53 +112,53 @@ on_highlight_widget(GtkWidget *grab_window,
   if (selected_window == NULL)
     {
       /* This window isn't in-process. Ignore it. */
-      parasite->selected_window = NULL;
+      gtkinspector->selected_window = NULL;
       return;
     }
 
-  if (gdk_window_get_toplevel(selected_window) == gtk_widget_get_window(parasite->window))
+  if (gdk_window_get_toplevel(selected_window) == gtk_widget_get_window(gtkinspector->window))
     {
-       /* Don't hilight things in the parasite window */
-        parasite->selected_window = NULL;
+       /* Don't hilight things in the gtkinspector window */
+        gtkinspector->selected_window = NULL;
         return;
     }
 
-  parasite->selected_window = selected_window;
+  gtkinspector->selected_window = selected_window;
 
   gdk_window_get_origin (selected_window, &x, &y);
   width = gdk_window_get_width (selected_window);
   height = gdk_window_get_height (selected_window);
 
-  gtk_window_move (GTK_WINDOW (parasite->highlight_window), x, y);
-  gtk_window_resize (GTK_WINDOW (parasite->highlight_window), width, height);
-  gtk_widget_show (parasite->highlight_window);
+  gtk_window_move (GTK_WINDOW (gtkinspector->highlight_window), x, y);
+  gtk_window_resize (GTK_WINDOW (gtkinspector->highlight_window), width, height);
+  gtk_widget_show (gtkinspector->highlight_window);
 }
 
 static void
 on_inspect_button_release (GtkWidget *button,
                            GdkEventButton *event,
-                           ParasiteWindow *parasite)
+                           GtkinspectorWindow *gtkinspector)
 {
   GdkCursor *cursor;
   GdkEventMask events;
 
   events = GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK;
 
-  if (parasite->grab_window == NULL)
+  if (gtkinspector->grab_window == NULL)
     {
-      parasite->grab_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_widget_show(parasite->grab_window);
-      gtk_window_resize (GTK_WINDOW (parasite->grab_window), 1, 1);
-      gtk_window_move (GTK_WINDOW (parasite->grab_window), -100, -100);
-      gtk_widget_add_events (parasite->grab_window, events);
+      gtkinspector->grab_window = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_widget_show(gtkinspector->grab_window);
+      gtk_window_resize (GTK_WINDOW (gtkinspector->grab_window), 1, 1);
+      gtk_window_move (GTK_WINDOW (gtkinspector->grab_window), -100, -100);
+      gtk_widget_add_events (gtkinspector->grab_window, events);
 
-      g_signal_connect (parasite->grab_window, "button_release_event", G_CALLBACK (on_inspect_widget), parasite);
-      g_signal_connect (parasite->grab_window, "motion_notify_event", G_CALLBACK(on_highlight_widget), parasite);
+      g_signal_connect (gtkinspector->grab_window, "button_release_event", G_CALLBACK (on_inspect_widget), gtkinspector);
+      g_signal_connect (gtkinspector->grab_window, "motion_notify_event", G_CALLBACK(on_highlight_widget), gtkinspector);
     }
 
   cursor = gdk_cursor_new_for_display (gtk_widget_get_display (button), GDK_CROSSHAIR);
   gdk_device_grab (gtk_get_current_event_device (),
-                   gtk_widget_get_window (parasite->grab_window),
+                   gtk_widget_get_window (gtkinspector->grab_window),
                    GDK_OWNERSHIP_WINDOW,
                    FALSE,
                    events,
@@ -169,42 +169,42 @@ on_inspect_button_release (GtkWidget *button,
 
 
 GtkWidget *
-gtkparasite_inspect_button_new(ParasiteWindow *parasite)
+gtkinspector_inspect_button_new(GtkinspectorWindow *gtkinspector)
 {
     GtkWidget *button;
 
     button = gtk_button_new_from_icon_name ("find", GTK_ICON_SIZE_BUTTON);
     gtk_widget_set_tooltip_text (button, "Inspect");
     g_signal_connect(G_OBJECT(button), "button_release_event",
-                     G_CALLBACK(on_inspect_button_release), parasite);
+                     G_CALLBACK(on_inspect_button_release), gtkinspector);
 
     return button;
 }
 
 static gboolean
-on_flash_timeout(ParasiteWindow *parasite)
+on_flash_timeout(GtkinspectorWindow *gtkinspector)
 {
-    parasite->flash_count++;
+    gtkinspector->flash_count++;
 
-    if (parasite->flash_count == 8)
+    if (gtkinspector->flash_count == 8)
     {
-        parasite->flash_cnx = 0;
+        gtkinspector->flash_cnx = 0;
         return FALSE;
     }
 
-    if (parasite->flash_count % 2 == 0)
+    if (gtkinspector->flash_count % 2 == 0)
     {
-        if (gtk_widget_get_visible(parasite->highlight_window))
-            gtk_widget_hide(parasite->highlight_window);
+        if (gtk_widget_get_visible(gtkinspector->highlight_window))
+            gtk_widget_hide(gtkinspector->highlight_window);
         else
-            gtk_widget_show(parasite->highlight_window);
+            gtk_widget_show(gtkinspector->highlight_window);
     }
 
     return TRUE;
 }
 
 void
-gtkparasite_flash_widget(ParasiteWindow *parasite, GtkWidget *widget)
+gtkinspector_flash_widget(GtkinspectorWindow *gtkinspector, GtkWidget *widget)
 {
     gint x, y, width, height;
     GdkWindow *parent_window;
@@ -212,7 +212,7 @@ gtkparasite_flash_widget(ParasiteWindow *parasite, GtkWidget *widget)
     if (!gtk_widget_get_visible(widget) || !gtk_widget_get_mapped(widget))
         return;
 
-    ensure_highlight_window(parasite);
+    ensure_highlight_window(gtkinspector);
 
     parent_window = gtk_widget_get_parent_window(widget);
     if (parent_window != NULL) {
@@ -226,16 +226,16 @@ gtkparasite_flash_widget(ParasiteWindow *parasite, GtkWidget *widget)
         width = alloc.width;
         height = alloc.height;
 
-        gtk_window_move(GTK_WINDOW(parasite->highlight_window), x, y);
-        gtk_window_resize(GTK_WINDOW(parasite->highlight_window), width, height);
-        gtk_widget_show(parasite->highlight_window);
+        gtk_window_move(GTK_WINDOW(gtkinspector->highlight_window), x, y);
+        gtk_window_resize(GTK_WINDOW(gtkinspector->highlight_window), width, height);
+        gtk_widget_show(gtkinspector->highlight_window);
 
-        if (parasite->flash_cnx != 0)
-            g_source_remove(parasite->flash_cnx);
+        if (gtkinspector->flash_cnx != 0)
+            g_source_remove(gtkinspector->flash_cnx);
 
-        parasite->flash_count = 0;
-        parasite->flash_cnx = g_timeout_add(150, (GSourceFunc)on_flash_timeout,
-                                            parasite);
+        gtkinspector->flash_count = 0;
+        gtkinspector->flash_cnx = g_timeout_add(150, (GSourceFunc)on_flash_timeout,
+                                            gtkinspector);
     }
 }
 

@@ -22,20 +22,20 @@
 
 #include "button-path.h"
 
-struct _ParasiteButtonPathPrivate
+struct _GtkinspectorButtonPathPrivate
 {
     GtkWidget *sw;
     GtkWidget *button_box;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteButtonPath, parasite_buttonpath, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkinspectorButtonPath, gtkinspector_buttonpath, GTK_TYPE_BOX)
 
 static void
-parasite_buttonpath_init (ParasiteButtonPath *bp)
+gtkinspector_buttonpath_init (GtkinspectorButtonPath *bp)
 {
   GtkWidget *label;
 
-  bp->priv = parasite_buttonpath_get_instance_private (bp);
+  bp->priv = gtkinspector_buttonpath_get_instance_private (bp);
 
   g_object_set (bp,
                 "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -65,18 +65,18 @@ parasite_buttonpath_init (ParasiteButtonPath *bp)
 }
 
 static void
-parasite_buttonpath_class_init(ParasiteButtonPathClass *klass)
+gtkinspector_buttonpath_class_init(GtkinspectorButtonPathClass *klass)
 {
 }
 
 GtkWidget *
-parasite_buttonpath_new ()
+gtkinspector_buttonpath_new ()
 {
-    return GTK_WIDGET (g_object_new (PARASITE_TYPE_BUTTONPATH, NULL));
+    return GTK_WIDGET (g_object_new (GTKINSPECTOR_TYPE_BUTTONPATH, NULL));
 }
 
 void
-parasite_buttonpath_set_widget(ParasiteButtonPath *bp,
+gtkinspector_buttonpath_set_widget(GtkinspectorButtonPath *bp,
                                GtkWidget *widget)
 {
   char *path, *word, **words;

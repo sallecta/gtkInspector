@@ -23,7 +23,7 @@
 #include <glib.h>
 
 #include "config.h"
-#include "parasite.h"
+#include "gtkinspector.h"
 #include "python-hooks.h"
 
 
@@ -31,10 +31,10 @@ void
 gtk_module_init(gint *argc, gchar ***argv)
 {
 #ifdef ENABLE_PYTHON
-    parasite_python_init();
+    gtkinspector_python_init();
 #endif
 
-    gtkparasite_window_create();
+    gtkinspector_window_create();
 }
 
 // vim: set et sw=4 ts=4:

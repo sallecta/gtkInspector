@@ -1,9 +1,9 @@
 moduledir = $(libdir)/gtk-3.0/modules
 
-libgtkparasite_la_SOURCES = \
+libgtkinspector_la_SOURCES = \
 	inspect-button.c \
 	module.c \
-	parasite.h \
+	gtkinspector.h \
 	prop-list.h \
 	prop-list.c \
 	property-cell-renderer.c \
@@ -25,19 +25,19 @@ libgtkparasite_la_SOURCES = \
 	object-hierarchy.c \
 	themes.h themes.c
 
-libgtkparasite_la_CFLAGS = -DDATADIR=\"$(datadir)\"
+libgtkinspector_la_CFLAGS = -DDATADIR=\"$(datadir)\"
 
-libgtkparasite_la_LDFLAGS = \
+libgtkinspector_la_LDFLAGS = \
 	-rpath $(moduledir) -module -avoid-version -no-undefined \
 	$(GTK_LIBS) \
 	$(PYGTK_LIBS) \
 	$(PYTHON_LIBS) \
 	@LDFLAGS@
 
-libgtkparasite_la_LIBADD =
+libgtkinspector_la_LIBADD =
 
 
-module_LTLIBRARIES = libgtkparasite.la
+module_LTLIBRARIES = libgtkinspector.la
 
 
 AM_CPPFLAGS = \

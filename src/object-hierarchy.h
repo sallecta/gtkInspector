@@ -20,39 +20,39 @@
  * THE SOFTWARE.
  */
 
-#ifndef _GTKPARASITE_OBJECTHIERARCHY_H_
-#define _GTKPARASITE_OBJECTHIERARCHY_H_
+#ifndef _gtkinspector_OBJECTHIERARCHY_H_
+#define _gtkinspector_OBJECTHIERARCHY_H_
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_OBJECTHIERARCHY            (parasite_objecthierarchy_get_type())
-#define PARASITE_OBJECTHIERARCHY(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_OBJECTHIERARCHY, ParasiteObjectHierarchy))
-#define PARASITE_OBJECTHIERARCHY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_OBJECTHIERARCHY, ParasiteObjectHierarchyClass))
-#define PARASITE_IS_OBJECTHIERARCHY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_OBJECTHIERARCHY))
-#define PARASITE_IS_OBJECTHIERARCHY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_OBJECTHIERARCHY))
-#define PARASITE_OBJECTHIERARCHY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_OBJECTHIERARCHY, ParasiteObjectHierarchyClass))
+#define GTKINSPECTOR_TYPE_OBJECTHIERARCHY            (gtkinspector_objecthierarchy_get_type())
+#define GTKINSPECTOR_OBJECTHIERARCHY(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTKINSPECTOR_TYPE_OBJECTHIERARCHY, GtkinspectorObjectHierarchy))
+#define GTKINSPECTOR_OBJECTHIERARCHY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTKINSPECTOR_TYPE_OBJECTHIERARCHY, GtkinspectorObjectHierarchyClass))
+#define GTKINSPECTOR_IS_OBJECTHIERARCHY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTKINSPECTOR_TYPE_OBJECTHIERARCHY))
+#define GTKINSPECTOR_IS_OBJECTHIERARCHY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTKINSPECTOR_TYPE_OBJECTHIERARCHY))
+#define GTKINSPECTOR_OBJECTHIERARCHY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTKINSPECTOR_TYPE_OBJECTHIERARCHY, GtkinspectorObjectHierarchyClass))
 
 
-typedef struct _ParasiteObjectHierarchyPrivate ParasiteObjectHierarchyPrivate;
+typedef struct _GtkinspectorObjectHierarchyPrivate GtkinspectorObjectHierarchyPrivate;
 
-typedef struct _ParasiteObjectHierarchy {
+typedef struct _GtkinspectorObjectHierarchy {
    GtkBox parent;
-   ParasiteObjectHierarchyPrivate *priv;
-} ParasiteObjectHierarchy;
+   GtkinspectorObjectHierarchyPrivate *priv;
+} GtkinspectorObjectHierarchy;
 
-typedef struct _ParasiteObjectHierarchyClass {
+typedef struct _GtkinspectorObjectHierarchyClass {
    GtkBoxClass parent;
-} ParasiteObjectHierarchyClass;
+} GtkinspectorObjectHierarchyClass;
 
 G_BEGIN_DECLS
 
-GType     parasite_objecthierarchy_get_type   (void);
-GtkWidget *parasite_objecthierarchy_new       (void);
-void      parasite_objecthierarchy_set_object (ParasiteObjectHierarchy *editor,
+GType     gtkinspector_objecthierarchy_get_type   (void);
+GtkWidget *gtkinspector_objecthierarchy_new       (void);
+void      gtkinspector_objecthierarchy_set_object (GtkinspectorObjectHierarchy *editor,
                                                GObject                 *object);
 
 G_END_DECLS
 
-#endif // _GTKPARASITE_OBJECTHIERARCHY_H_
+#endif // _gtkinspector_OBJECTHIERARCHY_H_
 
 // vim: set et sw=4 ts=4:

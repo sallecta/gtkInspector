@@ -20,11 +20,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "parasite.h"
+#include "gtkinspector.h"
 #include "property-cell-renderer.h"
 #include "widget-tree.h"
 
-struct _ParasitePropertyCellRendererPrivate
+struct _GtkinspectorPropertyCellRendererPrivate
 {
   GObject *object;
   char *name;
@@ -37,12 +37,12 @@ enum
   PROP_NAME
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasitePropertyCellRenderer, parasite_property_cell_renderer, GTK_TYPE_CELL_RENDERER_TEXT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkinspectorPropertyCellRenderer, gtkinspector_property_cell_renderer, GTK_TYPE_CELL_RENDERER_TEXT);
 
 static void
-parasite_property_cell_renderer_init(ParasitePropertyCellRenderer *renderer)
+gtkinspector_property_cell_renderer_init(GtkinspectorPropertyCellRenderer *renderer)
 {
-  renderer->priv = parasite_property_cell_renderer_get_instance_private (renderer);
+  renderer->priv = gtkinspector_property_cell_renderer_get_instance_private (renderer);
 }
 
 static void
@@ -51,7 +51,7 @@ get_property (GObject *object,
               GValue *value,
               GParamSpec *pspec)
 {
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (object);
+  GtkinspectorPropertyCellRenderer *r = GTKINSPECTOR_PROPERTY_CELL_RENDERER (object);
 
   switch (param_id)
     {
@@ -75,7 +75,7 @@ set_property (GObject *object,
               const GValue *value,
               GParamSpec *pspec)
 {
-  ParasitePropertyCellRenderer *r = PARASITE_PROPERTY_CELL_RENDERER (object);
+  GtkinspectorPropertyCellRenderer *r = GTKINSPECTOR_PROPERTY_CELL_RENDERER (object);
 
   switch (param_id)
     {
@@ -203,25 +203,25 @@ start_editing (GtkCellRenderer *renderer,
 
     if (G_VALUE_HOLDS_OBJECT (&gvalue))
       {
-        ParasiteWidgetTree *widget_tree = g_object_get_data (G_OBJECT (renderer), "parasite-widget-tree");
+        GtkinspectorWidgetTree *widget_tree = g_object_get_data (G_OBJECT (renderer), "gtkinspector-widget-tree");
         GObject *prop_object = g_value_get_object (&gvalue);
         GtkTreeIter iter;
 
         if (prop_object)
           {
             /* First check if the value is already in the tree (happens with 'parent' for instance) */
-            if (parasite_widget_tree_find_object (widget_tree, prop_object, &iter))
+            if (gtkinspector_widget_tree_find_object (widget_tree, prop_object, &iter))
               {
-                parasite_widget_tree_select_object (widget_tree, prop_object);
+                gtkinspector_widget_tree_select_object (widget_tree, prop_object);
               }
-            else if (parasite_widget_tree_find_object (widget_tree, object, &iter))
+            else if (gtkinspector_widget_tree_find_object (widget_tree, object, &iter))
               {
-                parasite_widget_tree_append_object (widget_tree, prop_object, &iter);
-                parasite_widget_tree_select_object (widget_tree, prop_object);
+                gtkinspector_widget_tree_append_object (widget_tree, prop_object, &iter);
+                gtkinspector_widget_tree_select_object (widget_tree, prop_object);
               }
             else
               {
-                 g_warning ("Parasite: couldn't find the widget in the tree");
+                 g_warning ("Gtkinspector: couldn't find the widget in the tree");
               }
           }
         g_value_unset (&gvalue);
@@ -373,7 +373,7 @@ start_editing (GtkCellRenderer *renderer,
 }
 
 static void
-parasite_property_cell_renderer_class_init (ParasitePropertyCellRendererClass *klass)
+gtkinspector_property_cell_renderer_class_init (GtkinspectorPropertyCellRendererClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
@@ -401,9 +401,9 @@ parasite_property_cell_renderer_class_init (ParasitePropertyCellRendererClass *k
 }
 
 GtkCellRenderer *
-parasite_property_cell_renderer_new(void)
+gtkinspector_property_cell_renderer_new(void)
 {
-    return g_object_new(PARASITE_TYPE_PROPERTY_CELL_RENDERER, NULL);
+    return g_object_new(GTKINSPECTOR_TYPE_PROPERTY_CELL_RENDERER, NULL);
 }
 
 

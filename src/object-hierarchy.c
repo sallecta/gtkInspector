@@ -21,7 +21,7 @@
  */
 
 #include "object-hierarchy.h"
-#include "parasite.h"
+#include "gtkinspector.h"
 
 enum
 {
@@ -29,24 +29,24 @@ enum
   NUM_COLUMNS
 };
 
-struct _ParasiteObjectHierarchyPrivate
+struct _GtkinspectorObjectHierarchyPrivate
 {
   GtkTreeStore *model;
   GtkTreeView *tree;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteObjectHierarchy, parasite_objecthierarchy, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkinspectorObjectHierarchy, gtkinspector_objecthierarchy, GTK_TYPE_BOX)
 
 static void
-parasite_objecthierarchy_init (ParasiteObjectHierarchy *oh)
+gtkinspector_objecthierarchy_init (GtkinspectorObjectHierarchy *oh)
 {
-  oh->priv = parasite_objecthierarchy_get_instance_private (oh);
+  oh->priv = gtkinspector_objecthierarchy_get_instance_private (oh);
 }
 
 static void
 constructed (GObject *object)
 {
-  ParasiteObjectHierarchy *oh = PARASITE_OBJECTHIERARCHY (object);
+  GtkinspectorObjectHierarchy *oh = GTKINSPECTOR_OBJECTHIERARCHY (object);
   GtkWidget *sw;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
@@ -75,7 +75,7 @@ constructed (GObject *object)
 }
 
 static void
-parasite_objecthierarchy_class_init (ParasiteObjectHierarchyClass *klass)
+gtkinspector_objecthierarchy_class_init (GtkinspectorObjectHierarchyClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -83,14 +83,14 @@ parasite_objecthierarchy_class_init (ParasiteObjectHierarchyClass *klass)
 }
 
 GtkWidget *
-parasite_objecthierarchy_new (void)
+gtkinspector_objecthierarchy_new (void)
 {
-  return GTK_WIDGET (g_object_new (PARASITE_TYPE_OBJECTHIERARCHY,
+  return GTK_WIDGET (g_object_new (GTKINSPECTOR_TYPE_OBJECTHIERARCHY,
                                    NULL));
 }
 
 void
-parasite_objecthierarchy_set_object (ParasiteObjectHierarchy *oh, GObject *object)
+gtkinspector_objecthierarchy_set_object (GtkinspectorObjectHierarchy *oh, GObject *object)
 {
   GObjectClass *klass = G_OBJECT_GET_CLASS (object);
   const gchar *class_name;

@@ -21,7 +21,7 @@
  */
 
 #include "classes-list.h"
-#include "parasite.h"
+#include "gtkinspector.h"
 
 enum
 {
@@ -35,9 +35,9 @@ typedef struct
 {
   gboolean enabled;
   gboolean user;
-} ParasiteClassesListByContext;
+} GtkinspectorClassesListByContext;
 
-struct _ParasiteClassesListPrivate
+struct _GtkinspectorClassesListPrivate
 {
   GtkWidget *toolbar;
   GtkWidget *view;
@@ -46,20 +46,20 @@ struct _ParasiteClassesListPrivate
   GtkStyleContext *current_context;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (ParasiteClassesList, parasite_classeslist, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkinspectorClassesList, gtkinspector_classeslist, GTK_TYPE_BOX)
 
 static void
-enabled_toggled (GtkCellRendererToggle *renderer, gchar *path, ParasiteClassesList *cl)
+enabled_toggled (GtkCellRendererToggle *renderer, gchar *path, GtkinspectorClassesList *cl)
 {
   GtkTreeIter iter;
   gboolean enabled;
   GHashTable *context;
-  ParasiteClassesListByContext *c;
+  GtkinspectorClassesListByContext *c;
   gchar *name;
 
   if (!gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (cl->priv->model), &iter, path))
     {
-      g_warning ("Parasite: Couldn't find the css class path for %s.", path);
+      g_warning ("Gtkinspector: Couldn't find the css class path for %s.", path);
       return;
     }
 
@@ -90,17 +90,17 @@ enabled_toggled (GtkCellRendererToggle *renderer, gchar *path, ParasiteClassesLi
         }
       else
         {
-          g_warning ("Parasite: Couldn't find the css class %s in the class hash table.", name);
+          g_warning ("Gtkinspector: Couldn't find the css class %s in the class hash table.", name);
         }
     }
   else
     {
-      g_warning ("Parasite: Couldn't find the hash table for the style context for css class %s.", name);
+      g_warning ("Gtkinspector: Couldn't find the hash table for the style context for css class %s.", name);
     }
 }
 
 static void
-add_clicked (GtkButton *button, ParasiteClassesList *cl)
+add_clicked (GtkButton *button, GtkinspectorClassesList *cl)
 {
   GtkWidget *dialog, *content_area, *entry, *label;
 
@@ -132,7 +132,7 @@ add_clicked (GtkButton *button, ParasiteClassesList *cl)
 
           gtk_style_context_add_class (cl->priv->current_context, name);
 
-          ParasiteClassesListByContext *c = g_new0 (ParasiteClassesListByContext, 1);
+          GtkinspectorClassesListByContext *c = g_new0 (GtkinspectorClassesListByContext, 1);
           c->enabled = TRUE;
           c->user = TRUE;
           g_hash_table_insert (context, (gpointer)g_strdup (name), c);
@@ -150,10 +150,10 @@ add_clicked (GtkButton *button, ParasiteClassesList *cl)
 }
 
 static void
-read_classes_from_style_context (ParasiteClassesList *cl)
+read_classes_from_style_context (GtkinspectorClassesList *cl)
 {
   GList *l, *classes;
-  ParasiteClassesListByContext *c;
+  GtkinspectorClassesListByContext *c;
   GtkTreeIter tree_iter;
   GHashTable *hash_context;
 
@@ -162,7 +162,7 @@ read_classes_from_style_context (ParasiteClassesList *cl)
 
   for (l = classes; l; l = l->next)
     {
-      c = g_new0 (ParasiteClassesListByContext, 1);
+      c = g_new0 (GtkinspectorClassesListByContext, 1);
       c->enabled = TRUE;
       g_hash_table_insert (hash_context, g_strdup (l->data), c);
 
@@ -178,11 +178,11 @@ read_classes_from_style_context (ParasiteClassesList *cl)
 }
 
 static void
-restore_defaults_clicked (GtkButton *button, ParasiteClassesList *cl)
+restore_defaults_clicked (GtkButton *button, GtkinspectorClassesList *cl)
 {
   GHashTableIter hash_iter;
   gchar *name;
-  ParasiteClassesListByContext *c;
+  GtkinspectorClassesListByContext *c;
   GHashTable *hash_context = g_hash_table_lookup (cl->priv->contexts, cl->priv->current_context);
 
   g_hash_table_iter_init (&hash_iter, hash_context);
@@ -203,7 +203,7 @@ restore_defaults_clicked (GtkButton *button, ParasiteClassesList *cl)
 }
 
 static void
-create_toolbar (ParasiteClassesList *cl)
+create_toolbar (GtkinspectorClassesList *cl)
 {
   GtkWidget *toolbar, *button;
 
@@ -233,7 +233,7 @@ draw_name_column (GtkTreeViewColumn   *column,
                   GtkCellRenderer     *renderer,
                   GtkTreeModel        *model,
                   GtkTreeIter         *iter,
-                  ParasiteClassesList *cl)
+                  GtkinspectorClassesList *cl)
 {
   gboolean user;
 
@@ -249,7 +249,7 @@ draw_name_column (GtkTreeViewColumn   *column,
 }
 
 static void
-parasite_classeslist_init (ParasiteClassesList *cl)
+gtkinspector_classeslist_init (GtkinspectorClassesList *cl)
 {
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
@@ -257,7 +257,7 @@ parasite_classeslist_init (ParasiteClassesList *cl)
 
   g_object_set (cl, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
 
-  cl->priv = parasite_classeslist_get_instance_private (cl);
+  cl->priv = gtkinspector_classeslist_get_instance_private (cl);
 
   create_toolbar (cl);
 
@@ -291,13 +291,13 @@ parasite_classeslist_init (ParasiteClassesList *cl)
 }
 
 void
-parasite_classeslist_set_widget (ParasiteClassesList *cl,
+gtkinspector_classeslist_set_widget (GtkinspectorClassesList *cl,
                                  GtkWidget *widget)
 {
   GtkStyleContext *widget_context;
   GHashTable *hash_context;
   GtkTreeIter tree_iter;
-  ParasiteClassesListByContext *c;
+  GtkinspectorClassesListByContext *c;
 
   gtk_list_store_clear (cl->priv->model);
 
@@ -331,14 +331,14 @@ parasite_classeslist_set_widget (ParasiteClassesList *cl,
 }
 
 static void
-parasite_classeslist_class_init (ParasiteClassesListClass *klass)
+gtkinspector_classeslist_class_init (GtkinspectorClassesListClass *klass)
 {
 }
 
 GtkWidget *
-parasite_classeslist_new ()
+gtkinspector_classeslist_new ()
 {
-    return GTK_WIDGET (g_object_new (PARASITE_TYPE_CLASSESLIST, NULL));
+    return GTK_WIDGET (g_object_new (GTKINSPECTOR_TYPE_CLASSESLIST, NULL));
 }
 
 // vim: set et sw=4 ts=4:

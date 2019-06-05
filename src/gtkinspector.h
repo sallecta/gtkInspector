@@ -20,8 +20,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_H_
-#define _GTKPARASITE_H_
+#ifndef _gtkinspector_H_
+#define _gtkinspector_H_
 
 
 #include <gtk/gtk.h>
@@ -54,16 +54,16 @@ typedef struct
     int flash_count;
     int flash_cnx;
 
-} ParasiteWindow;
+} GtkinspectorWindow;
 
 
-void gtkparasite_window_create();
+void gtkinspector_window_create();
 
-void gtkparasite_flash_widget(ParasiteWindow *parasite, GtkWidget *widget);
+void gtkinspector_flash_widget(GtkinspectorWindow *gtkinspector, GtkWidget *widget);
 
-GtkWidget *gtkparasite_inspect_button_new(ParasiteWindow *parasite);
+GtkWidget *gtkinspector_inspect_button_new(GtkinspectorWindow *gtkinspector);
 
 
-#endif // _GTKPARASITE_H_
+#endif // _gtkinspector_H_
 
 // vim: set et sw=4 ts=4:

@@ -20,27 +20,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_PROPERTY_CELL_RENDERER_H_
-#define _GTKPARASITE_PROPERTY_CELL_RENDERER_H_
+#ifndef _gtkinspector_PROPERTY_CELL_RENDERER_H_
+#define _gtkinspector_PROPERTY_CELL_RENDERER_H_
 
 
 #include <gtk/gtk.h>
 
 
-#define PARASITE_TYPE_PROPERTY_CELL_RENDERER            (parasite_property_cell_renderer_get_type())
-#define PARASITE_PROPERTY_CELL_RENDERER(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_PROPERTY_CELL_RENDERER, ParasitePropertyCellRenderer))
-#define PARASITE_PROPERTY_CELL_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_PROPERTY_CELL_RENDERER, ParasitePropertyCellRendererClass))
-#define PARASITE_IS_PROPERTY_CELL_RENDERER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_PROPERTY_CELL_RENDERER))
-#define PARASITE_IS_PROPERTY_CELL_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_PROPERTY_CELL_RENDERER))
-#define PARASITE_PROPERTY_CELL_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_PROPERTY_CELL_RENDERER, ParasitePropertyCellRendererClass))
+#define GTKINSPECTOR_TYPE_PROPERTY_CELL_RENDERER            (gtkinspector_property_cell_renderer_get_type())
+#define GTKINSPECTOR_PROPERTY_CELL_RENDERER(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTKINSPECTOR_TYPE_PROPERTY_CELL_RENDERER, GtkinspectorPropertyCellRenderer))
+#define GTKINSPECTOR_PROPERTY_CELL_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTKINSPECTOR_TYPE_PROPERTY_CELL_RENDERER, GtkinspectorPropertyCellRendererClass))
+#define GTKINSPECTOR_IS_PROPERTY_CELL_RENDERER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTKINSPECTOR_TYPE_PROPERTY_CELL_RENDERER))
+#define GTKINSPECTOR_IS_PROPERTY_CELL_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTKINSPECTOR_TYPE_PROPERTY_CELL_RENDERER))
+#define GTKINSPECTOR_PROPERTY_CELL_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTKINSPECTOR_TYPE_PROPERTY_CELL_RENDERER, GtkinspectorPropertyCellRendererClass))
 
-typedef struct _ParasitePropertyCellRendererPrivate ParasitePropertyCellRendererPrivate;
+typedef struct _GtkinspectorPropertyCellRendererPrivate GtkinspectorPropertyCellRendererPrivate;
 
 typedef struct
 {
   GtkCellRendererText parent;
-  ParasitePropertyCellRendererPrivate *priv;
-} ParasitePropertyCellRenderer;
+  GtkinspectorPropertyCellRendererPrivate *priv;
+} GtkinspectorPropertyCellRenderer;
 
 typedef struct
 {
@@ -52,19 +52,19 @@ typedef struct
    void (*reserved2)(void);
    void (*reserved3)(void);
 
-} ParasitePropertyCellRendererClass;
+} GtkinspectorPropertyCellRendererClass;
 
 
 G_BEGIN_DECLS
 
 
-GType parasite_property_cell_renderer_get_type();
-GtkCellRenderer *parasite_property_cell_renderer_new();
+GType gtkinspector_property_cell_renderer_get_type();
+GtkCellRenderer *gtkinspector_property_cell_renderer_new();
 
 
 G_END_DECLS
 
 
-#endif // _GTKPARASITE_PROPERTY_CELL_RENDERER_H_
+#endif // _gtkinspector_PROPERTY_CELL_RENDERER_H_
 
 // vim: set et sw=4 ts=4:

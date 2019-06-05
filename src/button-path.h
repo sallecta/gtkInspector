@@ -19,42 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef _GTKPARASITE_BUTTONPATH_H_
-#define _GTKPARASITE_BUTTONPATH_H_
+#ifndef _gtkinspector_BUTTONPATH_H_
+#define _gtkinspector_BUTTONPATH_H_
 
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_BUTTONPATH            (parasite_buttonpath_get_type())
-#define PARASITE_BUTTONPATH(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_BUTTONPATH, ParasiteButtonPath))
-#define PARASITE_BUTTONPATH_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_BUTTONPATH, ParasiteButtonPathClass))
-#define PARASITE_IS_BUTTONPATH(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_BUTTONPATH))
-#define PARASITE_IS_BUTTONPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_BUTTONPATH))
-#define PARASITE_BUTTONPATH_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_BUTTONPATH, ParasiteButtonPathClass))
+#define GTKINSPECTOR_TYPE_BUTTONPATH            (gtkinspector_buttonpath_get_type())
+#define GTKINSPECTOR_BUTTONPATH(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTKINSPECTOR_TYPE_BUTTONPATH, GtkinspectorButtonPath))
+#define GTKINSPECTOR_BUTTONPATH_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTKINSPECTOR_TYPE_BUTTONPATH, GtkinspectorButtonPathClass))
+#define GTKINSPECTOR_IS_BUTTONPATH(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTKINSPECTOR_TYPE_BUTTONPATH))
+#define GTKINSPECTOR_IS_BUTTONPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTKINSPECTOR_TYPE_BUTTONPATH))
+#define GTKINSPECTOR_BUTTONPATH_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTKINSPECTOR_TYPE_BUTTONPATH, GtkinspectorButtonPathClass))
 
 
-typedef struct _ParasiteButtonPathPrivate ParasiteButtonPathPrivate;
+typedef struct _GtkinspectorButtonPathPrivate GtkinspectorButtonPathPrivate;
 
-typedef struct _ParasiteButtonPath {
+typedef struct _GtkinspectorButtonPath {
    GtkBox parent;
-   ParasiteButtonPathPrivate *priv;
-} ParasiteButtonPath;
+   GtkinspectorButtonPathPrivate *priv;
+} GtkinspectorButtonPath;
 
-typedef struct _ParasiteButtonPathClass {
+typedef struct _GtkinspectorButtonPathClass {
    GtkBoxClass parent;
-} ParasiteButtonPathClass;
+} GtkinspectorButtonPathClass;
 
 
 G_BEGIN_DECLS
 
-GType parasite_buttonpath_get_type ();
-GtkWidget *parasite_buttonpath_new ();
-void parasite_buttonpath_set_widget (ParasiteButtonPath *bp,
+GType gtkinspector_buttonpath_get_type ();
+GtkWidget *gtkinspector_buttonpath_new ();
+void gtkinspector_buttonpath_set_widget (GtkinspectorButtonPath *bp,
                                      GtkWidget *widget);
 
 G_END_DECLS
 
 
-#endif // _GTKPARASITE_BUTTONPATH_H_
+#endif // _gtkinspector_BUTTONPATH_H_
 
 // vim: set et sw=4 ts=4:

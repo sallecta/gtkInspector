@@ -20,39 +20,39 @@
  * THE SOFTWARE.
  */
 
-#ifndef _GTKPARASITE_CLASSESLIST_H_
-#define _GTKPARASITE_CLASSESLIST_H_
+#ifndef _gtkinspector_CLASSESLIST_H_
+#define _gtkinspector_CLASSESLIST_H_
 
 #include <gtk/gtk.h>
 
-#define PARASITE_TYPE_CLASSESLIST            (parasite_classeslist_get_type())
-#define PARASITE_CLASSESLIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), PARASITE_TYPE_CLASSESLIST, ParasiteClassesList))
-#define PARASITE_CLASSESLIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), PARASITE_TYPE_CLASSESLIST, ParasiteClassesListClass))
-#define PARASITE_IS_CLASSESLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), PARASITE_TYPE_CLASSESLIST))
-#define PARASITE_IS_CLASSESLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PARASITE_TYPE_CLASSESLIST))
-#define PARASITE_CLASSESLIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), PARASITE_TYPE_CLASSESLIST, ParasiteClassesListClass))
+#define GTKINSPECTOR_TYPE_CLASSESLIST            (gtkinspector_classeslist_get_type())
+#define GTKINSPECTOR_CLASSESLIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTKINSPECTOR_TYPE_CLASSESLIST, GtkinspectorClassesList))
+#define GTKINSPECTOR_CLASSESLIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTKINSPECTOR_TYPE_CLASSESLIST, GtkinspectorClassesListClass))
+#define GTKINSPECTOR_IS_CLASSESLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTKINSPECTOR_TYPE_CLASSESLIST))
+#define GTKINSPECTOR_IS_CLASSESLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTKINSPECTOR_TYPE_CLASSESLIST))
+#define GTKINSPECTOR_CLASSESLIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTKINSPECTOR_TYPE_CLASSESLIST, GtkinspectorClassesListClass))
 
 
-typedef struct _ParasiteClassesListPrivate ParasiteClassesListPrivate;
+typedef struct _GtkinspectorClassesListPrivate GtkinspectorClassesListPrivate;
 
-typedef struct _ParasiteClassesList {
+typedef struct _GtkinspectorClassesList {
    GtkBox parent;
-   ParasiteClassesListPrivate *priv;
-} ParasiteClassesList;
+   GtkinspectorClassesListPrivate *priv;
+} GtkinspectorClassesList;
 
-typedef struct _ParasiteClassesListClass {
+typedef struct _GtkinspectorClassesListClass {
    GtkBoxClass parent;
-} ParasiteClassesListClass;
+} GtkinspectorClassesListClass;
 
 G_BEGIN_DECLS
 
-GType parasite_classeslist_get_type ();
-GtkWidget *parasite_classeslist_new ();
-void parasite_classeslist_set_widget (ParasiteClassesList* classeslist,
+GType gtkinspector_classeslist_get_type ();
+GtkWidget *gtkinspector_classeslist_new ();
+void gtkinspector_classeslist_set_widget (GtkinspectorClassesList* classeslist,
                                       GtkWidget *widget);
 
 G_END_DECLS
 
-#endif // _GTKPARASITE_CLASSESLIST_H_
+#endif // _gtkinspector_CLASSESLIST_H_
 
 // vim: set et sw=4 ts=4:
